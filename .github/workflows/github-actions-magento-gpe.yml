@@ -59,7 +59,7 @@ jobs:
           echo "Updating CHANGELOG ..."
           sudo sed -i 's/[version_here]/${{ steps.version.outputs.TAG_NAME }}/g' CHANGELOG.md
           echo "Updating order_builder ..."
-          sudo sed -i 's/[version_here]/${{ steps.version.outputs.TAG_NAME }}/g' ext/modules/payment/ginger/modules/builders/order_builder.php
+          sudo sed -i 's/[version_here]/${{ steps.version.outputs.TAG_NAME }}/g' etc/config.xml
 
         continue-on-error: false
 
