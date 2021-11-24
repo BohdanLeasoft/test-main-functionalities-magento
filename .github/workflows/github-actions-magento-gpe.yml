@@ -55,11 +55,11 @@ jobs:
       - name: version_update
         run: |
           echo "Updating README ..."
-          sudo sed -i 's/'version_here'/${{ steps.version.outputs.TAG_NAME }}/g' README.md
+          sudo sed -i 's/'VERSION_HERE'/${{ steps.version.outputs.TAG_NAME }}/g' README.md
           echo "Updating CHANGELOG ..."
-          sudo sed -i 's/'version_here'/${{ steps.version.outputs.TAG_NAME }}/g' CHANGELOG.md
+          sudo sed -i 's/'VERSION_HERE'/${{ steps.version.outputs.TAG_NAME }}/g' CHANGELOG.md
           echo "Updating order_builder ..."
-          sudo sed -i 's/'version_here'/${{ steps.version.outputs.TAG_NAME }}/g' etc/config.xml
+          sudo sed -i 's/'VERSION_HERE'/${{ steps.version.outputs.TAG_NAME }}/g' etc/config.xml
 
         continue-on-error: false
 
