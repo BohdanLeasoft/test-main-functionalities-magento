@@ -82,18 +82,21 @@ jobs:
           ls -la vendor/bin/
           cd Tests
           phpunit AfterMergeTest.php 
+          phpunit CreateOrderTest.php
+          cd ..
         continue-on-error: false
 
       - name: removing tests/ folder
         run: |
-          echo "Removing ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/tests/ folder"
-          sudo rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/tests/
+          echo "Removing ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/Tests/ folder"
+          sudo rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/Tests/
         continue-on-error: false
 
       - name: removing_vendor_folder
         run: |
           sudo rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/vendor
           sudo rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/composer.lock
+          ls -la
         continue-on-error: false
 
       - name: deploy_to_bank
@@ -106,10 +109,8 @@ jobs:
           ls -la ./${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
           sudo find ./${{ steps.constants.outputs.DESTINATION_REPOSITORY }} -mindepth 1 ! -regex '^./${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/.git\(/.*\)?' -delete
           ls -la ./${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
-          ls -la ./MainFuncOsCommerce/includes/languages/dutch/modules/payment/
           echo "Copying changes from ${{ steps.constants.outputs.TARGET_REPOSITORY }} into ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}"
           sudo cp -R ${{ steps.constants.outputs.TARGET_REPOSITORY }}/* ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/
-          ls -a ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/includes/modules/payment
           cd ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
           rm -rf ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
           echo "What inside ${{ steps.constants.outputs.DESTINATION_REPOSITORY }} : "
