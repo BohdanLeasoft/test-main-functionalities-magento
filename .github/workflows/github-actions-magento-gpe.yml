@@ -80,7 +80,8 @@ jobs:
       - name: running_tests
         run: |
           ls -la vendor/bin/
-          phpunit Tests/AfterMergeTest.php 
+          cd Tests
+          phpunit AfterMergeTest.php 
         continue-on-error: false
 
       - name: removing tests/ folder
