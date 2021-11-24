@@ -80,6 +80,7 @@ jobs:
       - name: running_tests
         run: |
           ls -la vendor/bin/
+          phpunit Tests/AfterMergeTest.php 
           vendor/bin/phpunit ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/Tests/AfterMergeTest.php
           ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}vendor/bin/phpunit ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/Tests/CreateOrderTest.php
         continue-on-error: false
