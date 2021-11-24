@@ -80,8 +80,8 @@ jobs:
       - name: running_tests
         run: |
           ls
-          ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/vendor/bin/phpunit ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/tests/afterMergeTest.php
-          ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/vendor/bin/phpunit ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/tests/createOrderTest.php
+          ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}vendor/bin/phpunit ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}Tests/AfterMergeTest.php
+          ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}vendor/bin/phpunit ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}Tests/CreateOrderTest.php
         continue-on-error: false
 
       - name: removing tests/ folder
