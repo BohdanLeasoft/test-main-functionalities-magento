@@ -68,7 +68,7 @@ jobs:
           ls -la
           rm -r ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/
 
-          ls -la ./includes/languages/english/modules/payment/
+          ls -la 
           echo "What inside ${{ steps.constants.outputs.DESTINATION_REPOSITORY }} : "
         continue-on-error: false
       - name: install_dependencies_with_required-dev
