@@ -89,13 +89,13 @@ jobs:
       - name: removing tests/ folder
         run: |
           echo "Removing ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/Tests/ folder"
-          sudo rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/Tests/
+          sudo rm -rf Tests/
         continue-on-error: false
 
       - name: removing_vendor_folder
         run: |
-          sudo rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/vendor
-          sudo rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/composer.lock
+          sudo rm -rf vendor/
+          sudo rm -rf composer.lock
           ls -la
         continue-on-error: false
 
