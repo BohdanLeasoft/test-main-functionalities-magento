@@ -76,8 +76,7 @@ jobs:
           rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/vendor
           rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/composer.lock
           
-          ls -la 
-          sudo composer install --working-dir=${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}
+          sudo composer install 
       - name: running_tests
         run: |
           ls
