@@ -24,7 +24,7 @@ jobs:
           echo "::set-output name=DESTINATION_REPOSITORY::test-bank-functionalities-magento"
           echo "::set-output name=DESTINATION_BRANCH::main"
           echo "::set-output name=TARGET_REPOSITORY::test-main-functionalities-magento"
-          echo "::set-output name=VENDOR_FOLDER_SRC::./"
+          echo "::set-output name=VENDOR_FOLDER_SRC::/"
           echo "::set-output name=USER_EMAIL::bogdan.shevchenko@leasoft.org"
           echo "::set-output name=TESTS_FOLDER_SRC::."
           echo "::set-output name=BANK_LABEL::emspay"
