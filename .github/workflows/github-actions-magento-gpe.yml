@@ -126,14 +126,12 @@ jobs:
 
       - name: install_dependencies_without_required-dev
         run: |
-          sudo composer install --working-dir=../${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/ --no-dev
+          sudo composer install --working-dir=Library --no-dev
         continue-on-error: false
 
       - name: create_a_asset_zip
         run: |
-          sudo rm -rf ../${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/includes/ginger/tests
-          mv ../${{ steps.constants.outputs.DESTINATION_REPOSITORY }} ../${{ steps.constants.outputs.BANK_LABEL }}
-          zip -vr ${{ steps.constants.outputs.BANK_LABEL }}.zip ../${{ steps.constants.outputs.BANK_LABEL }}/* -x "*.DS_Store"
+          zip -vr ems-online.zip ./* -x "*.DS_Store"
         continue-on-error: false
 
 
@@ -160,7 +158,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PERSONALACCESSTOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./${{ steps.constants.outputs.BANK_LABEL }}.zip
-          asset_name: ${{ steps.constants.outputs.BANK_LABEL }}.zip
+          asset_path: ./ems-online.zip
+          asset_name: ems-online.zip
           asset_content_type: application/zip
         continue-on-error: false
