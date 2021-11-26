@@ -77,6 +77,9 @@ jobs:
           rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/composer.lock
           
           sudo composer install 
+          cd Library/
+          sudo composer install 
+          cd ..
       - name: running_tests
         run: |
           ls -la vendor/bin/
@@ -89,13 +92,15 @@ jobs:
       - name: removing tests/ folder
         run: |
           echo "Removing ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/Tests/ folder"
-          sudo rm -rf Tests/
+          sudo rm -rf Tests/          
         continue-on-error: false
 
       - name: removing_vendor_folder
         run: |
           sudo rm -rf vendor/
           sudo rm -rf composer.lock
+          sudo rm -rf Library/vendor/
+          sudo rm -rf Library/composer.lock
           ls -la
         continue-on-error: false
 
