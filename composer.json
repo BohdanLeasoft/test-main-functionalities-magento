@@ -3,6 +3,10 @@
     "description": "Ginger Pay for Magento 2",
     "version": "1.1.0", 
     "require": {      
+        "magento/module-sales": "*",
+        "magento/module-checkout": "*",
+        "magento/module-payment": "*",
+        "magento/framework": "*",
         "gingerpayments/ginger-php": ">=2.1.0"
     },
     "require-dev": {
@@ -10,8 +14,7 @@
     },
     "type": "magento2-module", 
     "license": [
-        "OSL-3.0",
-        "AFL-3.0"
+        "MIT"
     ],
     
     "autoload": {
@@ -31,3 +34,5 @@
         ]
     }
 }
+
+
