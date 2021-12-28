@@ -138,9 +138,9 @@ jobs:
         run: |
           mkdir GingerPay
           mkdir GingerPay/Payment
-          cp -r !(|GingerPay) ./GingerPay/Payment/
+          cp -r ^GingerPay ./GingerPay/Payment/
 
-          zip -vr ems-online.zip ./GingerPay -x "*.DS_Store"
+          zip -vr ems-online.zip ./GingerPay/Payment -x "*.DS_Store"
 
         continue-on-error: false
 
