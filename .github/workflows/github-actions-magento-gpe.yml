@@ -138,7 +138,8 @@ jobs:
         run: |
           mkdir GingerPay
           mkdir GingerPay/Payment
-          rsync -R ./* ./GingerPay/Payment/
+          rsync -recursive ./* ./GingerPay/Payment/
+          rm -r ./GingerPay/Payment/GingerPay/
           zip -vr ems-online.zip ./GingerPay/Payment -x "*.DS_Store"
 
         continue-on-error: false
