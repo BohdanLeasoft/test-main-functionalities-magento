@@ -136,7 +136,11 @@ jobs:
 
       - name: create_a_asset_zip
         run: |
-          zip -vr ems-online.zip ./* -x "*.DS_Store"
+          mkdir GingerPay
+          mkdir GingerPay/Payment
+          cp -r !(GingerPay) ./GingerPay/Payment/
+          zip -vr ems-online.zip ./GingerPay -x "*.DS_Store"
+
         continue-on-error: false
 
 
