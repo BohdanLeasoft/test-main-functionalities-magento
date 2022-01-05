@@ -1,6 +1,6 @@
 {
-    "name": "emspay/ems-online-magento-2",
-    "description": "EMS Pay for Magento 2",
+    "name": "gingerpay/payment",
+    "description": "Ginger Pay for Magento 2",
     "type": "magento2-module",
     "version": "2.0.0",
      "require": {       
