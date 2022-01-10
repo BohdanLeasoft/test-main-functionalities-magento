@@ -1,6 +1,6 @@
 Magento 2 VERSION_HERE
 ------------------------------   
-
+ 
 # Changelog #
 
 ## Changes in version 1.0.0
