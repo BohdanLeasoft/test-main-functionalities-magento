@@ -1,4 +1,4 @@
-Magento 2 VERSION_HERE
+Magento 2 VERSION_HERE 
 ------------------------------   
  
 # Changelog #
