@@ -1,4 +1,9 @@
 Model/Methods/Sofort.php
 Model/Methods/Tikkie.php
+Model/Methods/KlarnaDirectDebit.php
 etc/adminhtml/methods/sofort.xml
 etc/adminhtml/methods/tikkie.xml
+etc/adminhtml/methods/klarnadirectdebit.xml
+view/frontend/web/images/sofort.png
+view/frontend/web/images/tikkie.png
+view/frontend/web/images/klarnadirectdebit.png
