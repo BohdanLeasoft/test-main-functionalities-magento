@@ -104,10 +104,9 @@ jobs:
           sed "$line_for_delete d" methods.xml > tmpmethods.xml && mv tmpmethods.xml methods.xml
           echo $method
           done
+          
           cd ../..
-          cd view/frontend/web/js/view/payment/
-          cd ../..
-
+          
           cd view/frontend/web/js/view/payment/
 
           for method in "${methodsjs_arr[@]}"
