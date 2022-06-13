@@ -1,0 +1,4 @@
+Model/Methods/Sofort.php
+Model/Methods/Tikkie.php
+etc/adminhtml/methods/sofort.xml
+etc/adminhtml/methods/tikkie.xml
