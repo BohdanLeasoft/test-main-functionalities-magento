@@ -114,11 +114,11 @@ jobs:
           line_for_delete=$(grep -n "$method" method-renderer.js | cut -d: -f1)
           sed "$line_for_delete d" method-renderer.js > tmpmethod-renderer.js && mv tmpmethod-renderer.js method-renderer.js
           echo $method
-          done
+          done         
+          
+          cd ../../../../../../          
           
           rm containerForArr.txt
-          
-          cd ../../../../../../
         continue-on-error: false
 
       - name: removing tests/ folder
