@@ -7,3 +7,6 @@ etc/adminhtml/methods/klarnadirectdebit.xml
 view/frontend/web/images/sofort.png
 view/frontend/web/images/tikkie.png
 view/frontend/web/images/klarnadirectdebit.png
+etc/adminhtml/methods/sofort.xml
+etc/adminhtml/methods/tikkie.xml
+

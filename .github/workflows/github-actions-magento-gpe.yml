@@ -59,12 +59,14 @@ jobs:
           sudo sed -i 's/'VERSION_HERE'/${{ steps.version.outputs.TAG_NAME }}/g' CHANGELOG.md
           echo "Updating order_builder ..."
           sudo sed -i 's/'VERSION_HERE'/${{ steps.version.outputs.TAG_NAME }}/g' etc/config.xml
+
         continue-on-error: false
 
       - name: removing ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}"
         run: |
           ls -la
           rm -r ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/
+
           ls -la 
           echo "What inside ${{ steps.constants.outputs.DESTINATION_REPOSITORY }} : "
         continue-on-error: false
@@ -95,6 +97,7 @@ jobs:
           
           source containerForArr.txt
           cd etc/adminhtml/
+
           for method in "${methods_arr[@]}"
           do 
           line_for_delete=$(grep -n "$method" methods.xml | cut -d: -f1)
@@ -103,13 +106,19 @@ jobs:
           done
           cd ../..
           cd view/frontend/web/js/view/payment/
+          cd ../..
+
+          cd view/frontend/web/js/view/payment/
+
           for method in "${methodsjs_arr[@]}"
           do 
           line_for_delete=$(grep -n "$method" method-renderer.js | cut -d: -f1)
           sed "$line_for_delete d" method-renderer.js > tmpmethod-renderer.js && mv tmpmethod-renderer.js method-renderer.js
           echo $method
           done
+          
           rm containerForArr.txt
+          
           cd ../../../../../../
         continue-on-error: false
 
