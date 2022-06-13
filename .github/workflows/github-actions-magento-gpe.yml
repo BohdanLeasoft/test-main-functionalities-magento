@@ -109,6 +109,7 @@ jobs:
           sed "$line_for_delete d" method-renderer.js > tmpmethod-renderer.js && mv tmpmethod-renderer.js method-renderer.js
           echo $method
           done
+          rm containerForArr.txt
           cd ../../../../../../
         continue-on-error: false
 
