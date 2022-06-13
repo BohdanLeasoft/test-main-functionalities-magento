@@ -1,2 +1,2 @@
-methodsjs_arr=('ginger_methods_sofort' 'ginger_methods_tikkie')
-methods_arr=('sofort.xml' 'tikkie.xml')
+methodsjs_arr=('ginger_methods_sofort' 'ginger_methods_tikkie' 'ginger_methods_klarnadirectdebit')
+methods_arr=('sofort.xml' 'tikkie.xml' 'klarnadirectdebit.xml')
