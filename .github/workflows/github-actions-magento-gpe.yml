@@ -16,7 +16,6 @@ jobs:
       - name: checkout
         run: |
           git checkout main
-
       - name: saving_constants
         id: constants
         run: |
@@ -105,7 +104,8 @@ jobs:
           sed "$line_for_delete d" methods.xml > tmpmethods.xml && mv tmpmethods.xml methods.xml
           echo $method
           done
-
+          cd ../..
+          cd view/frontend/web/js/view/payment/
           cd ../..
 
           cd view/frontend/web/js/view/payment/
@@ -116,7 +116,9 @@ jobs:
           sed "$line_for_delete d" method-renderer.js > tmpmethod-renderer.js && mv tmpmethod-renderer.js method-renderer.js
           echo $method
           done
-
+          
+          rm containerForArr.txt
+          
           cd ../../../../../../
         continue-on-error: false
 
@@ -172,7 +174,6 @@ jobs:
           rsync -recursive ./* ./GingerPay/Payment/
           rm -r ./GingerPay/Payment/GingerPay/
           zip -vr ems-online.zip ./GingerPay/Payment -x "*.DS_Store"
-
         continue-on-error: false
 
 
