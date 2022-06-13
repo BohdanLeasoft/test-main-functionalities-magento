@@ -1,0 +1,196 @@
+name: Magento2 GPE plugin
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v1
+        with:
+          repository: BohdanLeasoft/test-main-functionalities-magento
+          token: ${{ secrets.PERSONALACCESSTOKEN  }}
+
+      - name: checkout
+        run: |
+          git checkout main
+      - name: saving_constants
+        id: constants
+        run: |
+          echo "::set-output name=DESTINATION_ACCOUNT::BohdanLeasoft"
+          echo "::set-output name=DESTINATION_REPOSITORY::test-bank-functionalities-magento"
+          echo "::set-output name=DESTINATION_BRANCH::main"
+          echo "::set-output name=TARGET_REPOSITORY::test-main-functionalities-magento"
+          echo "::set-output name=VENDOR_FOLDER_SRC::/"
+          echo "::set-output name=USER_EMAIL::bogdan.shevchenko@leasoft.org"
+          echo "::set-output name=TESTS_FOLDER_SRC::."
+          echo "::set-output name=BANK_LABEL::emspay"
+      - name: retrieve_version
+        run: |
+          echo "::set-output name=TAG_NAME::$(git describe --abbrev=0)"
+        id: version
+
+      - name: retrieve_tag_message
+        run: |
+          echo "::set-output name=TAG_MESSAGE::$(git tag -l --format='%(contents) ' ${{  steps.version.outputs.TAG_NAME }})"
+        id: message
+
+      - name: getting_bank_func_from_remote_repository
+        run: |
+          sudo rm -rf ./${{ steps.constants.outputs.DESTINATION_REPOSITORY }}[!.git]*
+          git clone https://x-access-token:${{ secrets.PERSONALACCESSTOKEN }}@github.com/${{ steps.constants.outputs.DESTINATION_ACCOUNT }}/${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
+          cd ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/
+          git pull
+          git checkout bank-func
+          echo "copying_bank_func_into_main"
+          cp -R * ../
+          cd ../
+          ls
+          echo " Successfully merged with bank_func"
+        continue-on-error: false
+
+      - name: version_update
+        run: |
+          echo "Updating README ..."
+          sudo sed -i 's/'VERSION_HERE'/${{ steps.version.outputs.TAG_NAME }}/g' README.md
+          echo "Updating CHANGELOG ..."
+          sudo sed -i 's/'VERSION_HERE'/${{ steps.version.outputs.TAG_NAME }}/g' CHANGELOG.md
+          echo "Updating order_builder ..."
+          sudo sed -i 's/'VERSION_HERE'/${{ steps.version.outputs.TAG_NAME }}/g' etc/config.xml
+        continue-on-error: false
+
+      - name: removing ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}"
+        run: |
+          ls -la
+          rm -r ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/
+          ls -la 
+          echo "What inside ${{ steps.constants.outputs.DESTINATION_REPOSITORY }} : "
+        continue-on-error: false
+      - name: install_dependencies_with_required-dev
+        run: |
+          rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/vendor
+          rm -rf ${{ steps.constants.outputs.VENDOR_FOLDER_SRC }}/composer.lock
+          
+          sudo composer install 
+          cd Library/
+          sudo composer install 
+          cd ..
+      - name: running_tests
+        run: |
+          ls -la vendor/bin/
+          cd Tests
+          phpunit AfterMergeTest.php 
+          phpunit CreateOrderTest.php
+          cd ..
+        continue-on-error: false
+        
+      - name: Remove unavailable payment methods
+        run: |
+          ls -la
+          sed 's/.*/sudo rm -rf "\0"/' ./pathsToUnavailablePaymentMethodFiles.txt | sh
+          rm -rf pathsToUnavailablePaymentMethodFiles.txt
+          ls -la
+          
+          source containerForArr.txt
+          cd etc/adminhtml/
+          for method in "${methods_arr[@]}"
+          do 
+          line_for_delete=$(grep -n "$method" methods.xml | cut -d: -f1)
+          sed "$line_for_delete d" methods.xml > tmpmethods.xml && mv tmpmethods.xml methods.xml
+          echo $method
+          done
+          cd ../..
+          cd view/frontend/web/js/view/payment/
+          for method in "${methodsjs_arr[@]}"
+          do 
+          line_for_delete=$(grep -n "$method" method-renderer.js | cut -d: -f1)
+          sed "$line_for_delete d" method-renderer.js > tmpmethod-renderer.js && mv tmpmethod-renderer.js method-renderer.js
+          echo $method
+          done
+          cd ../../../../../../
+        continue-on-error: false
+
+      - name: removing tests/ folder
+        run: |
+          echo "Removing ${{ steps.constants.outputs.VENDOR_FOLDER_SRC}}/Tests/ folder"
+          sudo rm -rf Tests/          
+        continue-on-error: false
+
+      - name: removing_vendor_folder
+        run: |
+          sudo rm -rf vendor/
+          sudo rm -rf composer.lock
+          sudo rm -rf Library/vendor/
+          sudo rm -rf Library/composer.lock
+          ls -la
+        continue-on-error: false
+
+      - name: deploy_to_bank
+        id: deploy_to_bank
+        run : |
+          cd ../
+          git clone https://x-access-token:${{ secrets.PERSONALACCESSTOKEN }}@github.com/${{ steps.constants.outputs.DESTINATION_ACCOUNT }}/${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
+          cd ${{ steps.constants.outputs.DESTINATION_REPOSITORY }} && git checkout ${{ steps.constants.outputs.DESTINATION_BRANCH }} && cd ../
+          echo "Removing old files from bank_func"
+          ls -la ./${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
+          sudo find ./${{ steps.constants.outputs.DESTINATION_REPOSITORY }} -mindepth 1 ! -regex '^./${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/.git\(/.*\)?' -delete
+          ls -la ./${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
+          echo "Copying changes from ${{ steps.constants.outputs.TARGET_REPOSITORY }} into ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}"
+          sudo cp -R ${{ steps.constants.outputs.TARGET_REPOSITORY }}/* ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}/
+          cd ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
+          rm -rf ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
+          echo "What inside ${{ steps.constants.outputs.DESTINATION_REPOSITORY }} : "
+          ls -la
+          git config --global user.name gpemvp.git.bot
+          git config --global user.email ${{ steps.constants.outputs.USER_EMAIL }}
+          git add .
+          git commit -am "sync-up commit"
+          echo "Push to target repository"
+          git push -u origin HEAD:${{ steps.constants.outputs.DESTINATION_BRANCH }}
+        continue-on-error: false
+
+
+      - name: install_dependencies_without_required-dev
+        run: |
+          sudo composer install --working-dir=Library --no-dev
+        continue-on-error: false
+
+      - name: create_a_asset_zip
+        run: |
+          mkdir GingerPay
+          mkdir GingerPay/Payment
+          rsync -recursive ./* ./GingerPay/Payment/
+          rm -r ./GingerPay/Payment/GingerPay/
+          zip -vr ems-online.zip ./GingerPay/Payment -x "*.DS_Store"
+        continue-on-error: false
+
+
+      - name: create_release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONALACCESSTOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ steps.version.outputs.TAG_NAME }}
+          commitish: ${{ steps.constants.outputs.DESTINATION_BRANCH }}
+          release_name: ${{ steps.message.outputs.TAG_MESSAGE }}
+          body_path: CHANGELOG.md
+          draft: false
+          prerelease: false
+          owner: ${{ steps.constants.outputs.DESTINATION_ACCOUNT }}
+          repo: ${{ steps.constants.outputs.DESTINATION_REPOSITORY }}
+        continue-on-error: false
+
+      - name: upload_release_asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONALACCESSTOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ./ems-online.zip
+          asset_name: ems-online.zip
+          asset_content_type: application/zip
+        continue-on-error: false
