@@ -88,6 +88,37 @@ jobs:
           phpunit CreateOrderTest.php
           cd ..
         continue-on-error: false
+        
+      - name: Remove unavailable payment methods
+        run: |
+          ls -la
+          sed 's/.*/sudo rm -rf "\0"/' ./pathsToUnavailablePaymentMethodFiles.txt | sh
+          rm -rf pathsToUnavailablePaymentMethodFiles.txt
+          ls -la
+          
+          source containerForArr.txt
+          cd etc/adminhtml/
+
+          for method in "${methods_arr[@]}"
+          do 
+          line_for_delete=$(grep -n "$method" methods.xml | cut -d: -f1)
+          sed "$line_for_delete d" methods.xml > tmpmethods.xml && mv tmpmethods.xml methods.xml
+          echo $method
+          done
+
+          cd ../..
+
+          cd view/frontend/web/js/view/payment/
+
+          for method in "${methodsjs_arr[@]}"
+          do 
+          line_for_delete=$(grep -n "$method" method-renderer.js | cut -d: -f1)
+          sed "$line_for_delete d" method-renderer.js > tmpmethod-renderer.js && mv tmpmethod-renderer.js method-renderer.js
+          echo $method
+          done
+
+          cd ../../../../../../
+        continue-on-error: false
 
       - name: removing tests/ folder
         run: |
